@@ -85,7 +85,7 @@ func main() {
 		api := slack.New(token)
 		_, err := api.AuthTest()
 		if err != nil {
-			fmt.Println("ERROR: the token you used is not valid...")
+			fmt.Println("ERROR: authentication failed.(" + err.Error() + ")")
 			os.Exit(2)
 		}
 
