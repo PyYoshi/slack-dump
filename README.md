@@ -11,21 +11,24 @@ NAME:
 
 USAGE:
    main [global options] command [command options] [arguments...]
-   
+
 VERSION:
-   1.1.1
-   
-AUTHOR(S):
-   Joe Fitzgerald <jfitzgerald@pivotal.io> Sunyong Lim <dicebattle@gmail.com> Yoshihiro Misawa <myoshi321go@gmail.com> 
-   
+   1.2.1
+
+AUTHORS:
+   Joe Fitzgerald <jfitzgerald@pivotal.io>
+   Sunyong Lim <dicebattle@gmail.com>
+   Yoshihiro Misawa <myoshi321go@gmail.com>
+   takameron <contact@takameron.info>
+
 COMMANDS:
-     help, h  Shows a list of commands or help for one command
+   help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
    --token value, -t value   a Slack API token: (see: https://api.slack.com/web) [$SLACK_API_TOKEN]
-   --output value, -o value  Output directory path. Default: current directory path
-   --help, -h                show help
-   --version, -v             print the version
+   --output value, -o value  Output directory path. Default: current directory path [$]
+   --help, -h                show help (default: false)
+   --version, -v             print the version (default: false)
 
 ```
 

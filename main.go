@@ -17,8 +17,8 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/nlopes/slack"
-	"github.com/urfave/cli"
+	"github.com/slack-go/slack"
+	"github.com/urfave/cli/v2"
 )
 
 func check(e error) {
@@ -32,35 +32,41 @@ func main() {
 	app.Name = "slack-dump"
 	app.Usage = "export channel and group history to the Slack export format include Direct message"
 	app.Flags = []cli.Flag{
-		cli.StringFlag{
-			Name:   "token, t",
-			Value:  "",
-			Usage:  "a Slack API token: (see: https://api.slack.com/web)",
-			EnvVar: "SLACK_API_TOKEN",
+		&cli.StringFlag{
+			Name:    "token",
+			Aliases: []string{"t"},
+			Value:   "",
+			Usage:   "a Slack API token: (see: https://api.slack.com/web)",
+			EnvVars: []string{"SLACK_API_TOKEN"},
 		},
-		cli.StringFlag{
-			Name:   "output, o",
-			Value:  "",
-			Usage:  "Output directory path. Default: current directory path",
-			EnvVar: "",
+		&cli.StringFlag{
+			Name:    "output",
+			Aliases: []string{"o"},
+			Value:   "",
+			Usage:   "Output directory path. Default: current directory path",
+			EnvVars: []string{""},
 		},
 	}
-	app.Authors = []cli.Author{
-		cli.Author{
+	app.Authors = []*cli.Author{
+		{
 			Name:  "Joe Fitzgerald",
 			Email: "jfitzgerald@pivotal.io",
 		},
-		cli.Author{
+		{
 			Name:  "Sunyong Lim",
 			Email: "dicebattle@gmail.com",
 		},
-		cli.Author{
+		{
 			Name:  "Yoshihiro Misawa",
 			Email: "myoshi321go@gmail.com",
 		},
+		{
+			Name:  "takameron",
+			Email: "contact@takameron.info",
+		},
 	}
-	app.Version = "1.1.3"
-	app.Action = func(c *cli.Context) {
+	app.Version = "1.2.1"
+	app.Action = func(c *cli.Context) error {
 		token := c.String("token")
 		if token == "" {
 			fmt.Println("ERROR: the token flag is required...")
@@ -81,7 +87,7 @@ func main() {
 			os.MkdirAll(outputDir, 0755)
 		}
 
-		rooms := c.Args()
+		rooms := c.Args().Slice()
 		api := slack.New(token)
 		_, err := api.AuthTest()
 		if err != nil {
@@ -100,6 +106,8 @@ func main() {
 		dumpRooms(api, dir, rooms)
 
 		archive(dir, outputDir)
+
+		return nil
 	}
 
 	app.Run(os.Args)
@@ -378,6 +386,9 @@ func fetchChannelHistory(api *slack.Client, ID string) []slack.Message {
 	history, err := api.GetChannelHistory(ID, historyParams)
 	check(err)
 	messages := history.Messages
+	if len(messages) == 0 {
+		return messages
+	}
 	latest := messages[len(messages)-1].Timestamp
 	for {
 		if history.HasMore != true {

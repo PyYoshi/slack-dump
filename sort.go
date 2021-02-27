@@ -1,6 +1,6 @@
 package main
 
-import "github.com/nlopes/slack"
+import "github.com/slack-go/slack"
 
 type byTimestamp []slack.Message
 

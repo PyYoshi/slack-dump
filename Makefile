@@ -1,14 +1,7 @@
 VERSION := $(shell git describe --tags)
 
 install-tools:
-	go get -u -v github.com/golang/dep/cmd/dep
 	go get -u -v github.com/mitchellh/gox
-
-install-deps:
-	dep ensure
-
-update-deps:
-	dep ensure -update
 
 gox: clean
 	gox -verbose \

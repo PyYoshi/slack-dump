@@ -28,3 +28,6 @@ slackdum*
 
 .vscode/
 dist/
+
+# Dependency directories
+vendor/
